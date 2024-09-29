@@ -1,0 +1,55 @@
+.container {
+  padding: 20px;
+}
+.image-swiper {
+  width: 590rpx;
+  height: 300px; /* Adjust height as needed */
+}
+
+.gallery-image {
+  width: 100%;
+  height: 100%;
+}
+.result-image {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.result-title {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.copy-biaoti-button,.copy-link-button, .download-video-button, .download-all-pics-button {
+  width: 200rpx;
+  background-color: #ff9800;
+  color: white;
+  font-size: 25rpx;
+  text-align: center;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-left: 10prx;
+  margin-bottom: 15px;
+  padding: 0,1px;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.gallery-image {
+  width: 300rpx;
+  height: 400rpx;
+  margin-bottom: 10px;
+  margin-left: 150rpx;
+}

@@ -1,0 +1,40 @@
+<view class="container">
+  <!-- 轮播图 -->
+  <swiper class="swiper-container" autoplay="true" interval="3000" circular="true">
+    <swiper-item bindtap="onSwiperItemTap" data-index="0">
+      <image class="swiper-image" src="/images/备用去水印1.png" mode="aspectFill"></image>
+    </swiper-item>
+    <swiper-item bindtap="onSwiperItemTap" data-index="1">
+      <image class="swiper-image" src="/images/备用去水印2.png" mode="aspectFill"></image>
+    </swiper-item>
+    <swiper-item bindtap="onSwiperItemTap" data-index="2">
+      <image class="swiper-image" src="/images/备用去水印3.png" mode="aspectFill"></image>
+    </swiper-item>
+    <swiper-item bindtap="onSwiperItemTap" data-index="3">
+      <image class="swiper-image" src="/images/备用去水印3.png" mode="aspectFill"></image>
+    </swiper-item>
+  </swiper>
+
+  <!-- 输入框和按钮 -->
+  <textarea placeholder="请输入视频(或图集)链接" class="input-box" bindinput="onInputUrl" value="{{inputUrl}}"></textarea>
+
+  <view class="button-container">
+    <button class="parse-button" bindtap="onPasteAndParse">粘贴并解析</button>
+    <button class="clear-button" bindtap="onClear">清空内容</button>
+    <button class="share-button" open-type="share">分享好友</button>
+  </view>
+
+  <!-- 联系客服按钮 -->
+  <button class="contact-button" openType="contact">客服</button>
+</view>
+
+<!-- 弹窗 -->
+<view class="popup" wx:if="{{showPopup}}" animation="{{popupAnimation}}">
+  <view class="popup-content">
+    <div class="arrow-icon"></div>
+    <view class="text-button-container">
+      <text class="popup-text">点我「添加小程序」方便下次访问！</text>
+      <button class="close-popup" bindtap="closePopup">✖</button>
+    </view>
+  </view>
+</view>

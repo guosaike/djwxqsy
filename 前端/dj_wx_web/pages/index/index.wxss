@@ -1,0 +1,138 @@
+.container {
+  padding: 20px;
+}
+
+/* 轮播图容器样式 */
+.swiper-container {
+  width: 100%;
+  height: 400rpx;
+  margin-bottom: 40rpx;
+  border-radius: 10rpx;
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+/* 轮播图图片样式 */
+.swiper-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 20rpx;
+}
+
+.input-box {
+  width: 100%;
+  height: 100px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.parse-button,
+.share-button,
+.clear-button {
+  margin-right: 20rpx;
+  background-color: #459AD0;
+  color: white;
+  text-align: center;
+  border-radius: 10px;
+  font-size: 28rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80rpx;
+  width: 200rpx;
+}
+
+.clear-button {
+  background-color: #ccc;
+}
+
+.share-button {
+  background-color: rgb(189, 75, 75);
+}
+
+.popup {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px; /* 减小内边距 */
+  border-radius: 6px; /* 减小边角半径 */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  animation: shake 0.5s ease-in-out infinite alternate;
+  width: auto; /* 自动宽度 */
+}
+
+.popup-content {
+  display: flex; /* 使用 Flexbox */
+  align-items: center; /* 垂直居中对齐 */
+}
+
+.popup-text {
+  font-size: 14px; /* 减小字体大小 */
+  margin-right: 5px; /* 减小右边距 */
+}
+
+.close-popup {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px; /* 减小关闭按钮字体大小 */
+  cursor: pointer;
+}
+
+
+.arrow-icon {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid black; /* 三角形颜色 */
+  position: absolute;
+  top: -10px; /* 调整箭头位置 */
+  left: 83%;
+  transform: translateX(-50%);
+}
+
+.text-button-container {
+  display: flex;  /* 将文本和按钮放入 flexbox 中 */
+  align-items: center;  /* 对齐中心 */
+  margin-left: 10px;  /* 文本与箭头之间的间距 */
+}
+
+/* 抖动动画 */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-5px); }
+}
+
+.contact-button {
+  position: fixed; /* 固定到右侧 */
+  top: 67%; /* 向下调整位置，根据需要可以微调 */
+  right: 10px; /* 悬浮到最右侧 */
+  background: linear-gradient(45deg, #57c0e6, #2a88b2); /* 渐变颜色 */
+  color: white;
+  border-radius: 10px;
+  font-size: 30rpx; /* 减小字体大小 */
+  height: 50rpx; /* 总体高度减小 */
+  width: 120rpx; /* 总体宽度减小 */
+  box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.2); /* 提升高科技感 */
+  cursor: pointer; /* 鼠标悬停光标 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 鼠标悬停效果 */
+.contact-button:hover {
+  background: linear-gradient(45deg, #2a88b2, #57c0e6); /* 悬停时反转渐变 */
+}

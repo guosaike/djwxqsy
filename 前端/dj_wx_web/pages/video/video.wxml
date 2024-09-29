@@ -1,0 +1,23 @@
+<view class="container">
+  <image src="{{resultData.photo}}" mode="aspectFit" class="result-image"></image>
+  <text class="result-title">{{resultData.title}}</text>
+
+  <view wx:if="{{resultData.downurl}}">
+    <image src="{{resultData.photo}}" mode="aspectFit" class="gallery-image"></image>
+    <view class="button-container">
+      <button data-action="copyTitle" class="copy-biaoti-button" bindtap="confirmAdWatch">复制标题</button>
+      <button data-action="copyLink" class="copy-link-button" bindtap="confirmAdWatch">复制链接</button>
+      <button data-action="downloadVideo" class="download-video-button" bindtap="confirmAdWatch">保存视频</button>
+    </view>
+  </view>
+
+  <view wx:if="{{resultData.pics && resultData.pics.length > 0}}">
+    <!-- Swiper component for images -->
+    <swiper class="image-swiper" indicator-dots="true" autoplay="false" circular="true">
+      <swiper-item wx:for="{{resultData.pics}}" wx:key="*this">
+        <image src="{{item}}" mode="aspectFit" class="gallery-image"></image>
+      </swiper-item>
+    </swiper>
+    <button data-action="downloadAllPics" class="download-all-pics-button" bindtap="confirmAdWatch">保存图片</button>
+  </view>
+</view>
