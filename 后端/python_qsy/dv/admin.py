@@ -13,9 +13,19 @@ class BaseAdmin(admin.ModelAdmin):
             field.help_text = "开发者微信: python_kk 去水印接口地址https://api.ake999.com"
         return form
 
-@admin.register(DjVxymq, DjVxyq)
+@admin.register(DjVxymq)
 class BookAdmin(BaseAdmin):
-    list_display = ('appid1', 'appid2', 'appid3', 'appid4', 'slave_addr', 'code_num',
-                    'title_video', 'photo_video', 'downurl_video', 'title_photo',
-                    'photo_photo', 'pics_photo')
+    list_display = ('appid1', 'appid2', 'appid3', 'appid4', 'slave_addr')
     search_fields = ('slave_addr',)  # 注意：添加逗号
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+        fields_to_hide = ["data_field","code_field","code_num","title_video","photo_video","downurl_video","title_photo","photo_photo","pics_photo"]  # 要隐藏的字段
+        for fs in fieldsets:
+            fs[1]['fields'] = [f for f in fs[1]['fields'] if f not in fields_to_hide]
+        return fieldsets
+
+    # def get_readonly_fields(self, request, obj=None):
+    #     readonly_fields = super().get_readonly_fields(request, obj)
+    #     fields_to_readonly = ["data_field","code_field","code_num","title_video","photo_video","downurl_video","title_photo","photo_photo","pics_photo"]  # 要设置为只读的字段
+    #     return readonly_fields + fields_to_readonly

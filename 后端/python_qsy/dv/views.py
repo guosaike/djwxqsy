@@ -15,7 +15,24 @@ class Ymq(APIView):
     def get(self,request):
         obj = DjVxymq.objects.get(id=1)
         ser1 = ser.YmqSerializer(obj)
-        return Response({'data':ser1.data})
+        data = {
+            "appid1":(ser1.data)['appid1'],
+            "appid2":(ser1.data)['appid2'],
+            "appid3":(ser1.data)['appid3'],
+            "appid4":(ser1.data)['appid4'],
+            "slave_addr":(ser1.data)['slave_addr'],
+            "adUnitId":(ser1.data)['adUnitId'],
+            "data_field":"data",
+            "code_field":"code",
+            "code_num":"200",
+            "title_video":"title",
+            "photo_video":"cover_url",
+            "downurl_video":"video_url",
+            "title_photo":"title",
+            "photo_photo":"cover_url",
+            "pics_photo":"images",
+        }
+        return Response({'data':data})
 
 class Yq(APIView):
     def get(self,request):
