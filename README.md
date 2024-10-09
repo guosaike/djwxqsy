@@ -9,6 +9,14 @@ python_kk，有问题可以询问，免费解答，后期抽时间教大家流�
 
 
 
+一、视频教程：
+
+https://www.bilibili.com/video/BV18N24Y7E9s/?spm_id_from=333.999.0.0&vd_source=9cf5b61e7de8ce2e87bb20e65df646e2
+
+
+
+二、图文教程
+
 搭建流程：
 
 1、准备一个备案域名，这里以（test.aketest.site为例），域名和服务器最好都在京东云或者阿里云买，不然你的服务器买了，域名就算其他备案了，京东还要备案
