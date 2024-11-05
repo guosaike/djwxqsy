@@ -230,9 +230,16 @@ Page({
           this.setData({
             currentAction: action
           });
-          this.watchAd(() => {
+          
+          // 判断广告 ID 是否存在
+          if (this.data.adUnitId) {
+            this.watchAd(() => {
+              this.handleAction();
+            });
+          } else {
+            // 直接执行操作
             this.handleAction();
-          });
+          }
         }
       }
     });
@@ -446,7 +453,7 @@ Page({
     }
   },
 
-  onDownloadAllPics: function() {
+  onDownloadAllPics: function () {
     const pics = this.data.resultData.pics;
     if (!pics || pics.length === 0) {
       wx.showToast({
