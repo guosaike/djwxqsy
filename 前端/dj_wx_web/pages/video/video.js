@@ -52,7 +52,6 @@ Page({
       'https://p9-sign.douyinpic.com',
       'https://p97-sign.douyinpic.com',
       'https://q.weishi.qq.com',
-      'https://qq.yyymvp.com',
       'https://qsy.ludeqi.com',
       'https://shortv.cdp.qq.com',
       'https://sns-img-qc.xhscdn.com',
@@ -72,7 +71,6 @@ Page({
       'https://upos-sz-mirrorali.bilivideo.com',
       'https://upos-sz-mirrorcos.bilivideo.com',
       'https://upos-sz-mirrorhw.bilivideo.com',
-      'https://uu.yyymvp.com',
       'https://v.weishi.qq.com',
       'https://v.xiaohongshu.com',
       'https://v1-cold.douyinvod.com',
@@ -140,7 +138,6 @@ Page({
       'https://videocdn.poizon.com',
       'https://xianyu-video.alicdn.com',
       'https://xx1.video.xiuxiustatic.com',
-      'https://yy.yyymvp.com',
       'https://v93.douyinvod.com',
       'https://v5-che.douyinvod.com',
       'https://v6-qos-hourly.douyinvod.com',
@@ -196,7 +193,7 @@ Page({
 
     // 请求后台获取配置
     wx.request({
-      url: 'https://test.aketest.site/ymq/',
+      url: 'https://qsy.aketest.site/ymq/',
       method: 'GET',
       success: (res) => {
         const config = res.data.data;
@@ -222,27 +219,39 @@ Page({
 
   confirmAdWatch: function (e) {
     const action = e.currentTarget.dataset.action;
-    wx.showModal({
-      title: '提示',
-      content: '需观看一段广告，即可获取资源',
-      success: (res) => {
-        if (res.confirm) {
-          this.setData({
-            currentAction: action
-          });
-          
-          // 判断广告 ID 是否存在
-          if (this.data.adUnitId) {
-            this.watchAd(() => {
-              this.handleAction();
-            });
-          } else {
-            // 直接执行操作
-            this.handleAction();
+    const currentTime = new Date().getTime();
+    const twelveHours = 12 * 60 * 60 * 1000;
+
+    // 如果 adUnitId 存在
+    if (this.data.adUnitId) {
+      // 检查是否在冷却时间内
+      const lastWatchedTime = this.data.adWatchedTimestamp;
+      if (this.data.hasWatchedAd && lastWatchedTime && (currentTime - lastWatchedTime) < twelveHours) {
+        // 如果已经看过广告并且在冷却时间内，直接执行操作
+        this.setData({ currentAction: action });
+        this.handleAction();
+      } else {
+        // 需要观看广告，弹出提示框
+        wx.showModal({
+          title: '提示',
+          content: '需观看一段广告，即可获取资源',
+          success: (res) => {
+            if (res.confirm) {
+              this.setData({
+                currentAction: action
+              });
+              this.watchAd(() => {
+                this.handleAction();
+              });
+            }
           }
-        }
+        });
       }
-    });
+    } else {
+      // 如果 adUnitId 不存在，直接执行操作
+      this.setData({ currentAction: action });
+      this.handleAction();
+    }
   },
 
   handleAction: function () {
@@ -265,21 +274,12 @@ Page({
   },
 
   watchAd: function (callback) {
-    const currentTime = new Date().getTime();
-    const twelveHours = 12 * 60 * 60 * 1000;
-    const lastWatchedTime = this.data.adWatchedTimestamp;
-
-    if (this.data.hasWatchedAd && lastWatchedTime && (currentTime - lastWatchedTime) < twelveHours) {
-      callback();
-      return;
-    }
-
     wx.showLoading({
       title: '加载广告中...'
     });
 
     const videoAd = wx.createRewardedVideoAd({
-      adUnitId: this.data.adUnitId // 使用从 Django 请求得到的广告单元 ID
+      adUnitId: this.data.adUnitId // 使用从请求得到的广告单元 ID
     });
 
     videoAd.load()
@@ -298,6 +298,7 @@ Page({
     videoAd.offClose();
     videoAd.onClose((status) => {
       if (status && status.isEnded) {
+        const currentTime = new Date().getTime();
         wx.setStorageSync('hasWatchedAd', true);
         wx.setStorageSync('adWatchedTimestamp', currentTime);
         this.setData({
@@ -353,21 +354,69 @@ Page({
 
   onDownloadVideo: function () {
     let url = this.data.resultData.downurl;
-
     const isInDownloadList = this.isUrlInDownloadList(url);
 
-    if (!isInDownloadList) {
-      url = `https://test.aketest.site/api/download/video/?url=${encodeURIComponent(this.data.resultData.downurl)}`;
-    }
+    if (isInDownloadList) {
+        // 直接下载
+        this.startVideoDownload(url);
+    } else {
+        // 先提示用户正在计算视频大小
+        wx.showLoading({
+            title: '计算视频大小...',
+        });
 
-    if (!url) {
-      wx.showToast({
-        title: '无效的视频链接',
-        icon: 'none'
-      });
-      return;
-    }
+        console.log("正在获取视频大小");
+        const apiUrl = `https://qsy.aketest.site/api/get_video_size/?url=${encodeURIComponent(url)}`;
+        wx.request({
+            url: apiUrl,
+            method: 'GET', // 使用 GET 请求获取文件大小
+            success: (res) => {
+                // 先隐藏提示框
+                wx.hideLoading();
 
+                if (res.data.error) {
+                    wx.showToast({
+                        title: '获取视频大小失败',
+                        icon: 'none'
+                    });
+                    return;
+                }
+
+                const videoSize = parseInt(res.data.content_length, 10); // 获取文件大小
+                console.log(videoSize, '视频大小');
+
+                if (videoSize > 20 * 1024 * 1024) {
+                    wx.setClipboardData({
+                        data: url,
+                        success: () => {
+                            wx.showToast({
+                                title: '视频超过20MB，请使用浏览器下载',
+                                icon: 'none'
+                            });
+                        }
+                    });
+                } else {
+                    // // 视频大小合适，直接下载
+                    // this.startVideoDownload(url);
+                    // 视频大小合适，直接下载
+                    // 使用指定的下载地址
+                    const downloadUrl = `https://qsy.aketest.site/api/download/video/?url=${encodeURIComponent(url)}`;
+                    this.startVideoDownload(downloadUrl);
+                }
+            },
+            fail: (err) => {
+                wx.hideLoading(); // 确保在失败时也隐藏提示框
+                wx.showToast({
+                    title: '获取视频大小失败',
+                    icon: 'none'
+                });
+                console.error('获取视频大小失败:', err);
+            }
+        });
+    }
+},
+
+  startVideoDownload: function (url) {
     wx.showLoading({
       title: '准备下载...',
     });
@@ -378,34 +427,7 @@ Page({
         wx.hideLoading(); // 确保成功时隐藏加载动画
 
         if (res.statusCode === 200) {
-          if (!isInDownloadList) {
-            wx.getFileInfo({
-              filePath: res.tempFilePath,
-              success: (fileRes) => {
-                if (fileRes.size > 20 * 1024 * 1024) {
-                  wx.setClipboardData({
-                    data: url,
-                    success: () => {
-                      wx.showToast({
-                        title: '视频超过20MB，请使用浏览器下载',
-                        icon: 'none'
-                      });
-                    }
-                  });
-                } else {
-                  saveVideo(res.tempFilePath);
-                }
-              },
-              fail: () => {
-                wx.showToast({
-                  title: '获取文件信息失败',
-                  icon: 'none'
-                });
-              }
-            });
-          } else {
-            saveVideo(res.tempFilePath);
-          }
+          saveVideo(res.tempFilePath);
         } else {
           wx.showToast({
             title: '视频下载失败',
@@ -480,7 +502,7 @@ Page({
         return;
       }
 
-      const url = `https://test.aketest.site/api/download/image/?url=${encodeURIComponent(pics[index])}`;
+      const url = `https://qsy.aketest.site/api/download/image/?url=${encodeURIComponent(pics[index])}`;
       wx.downloadFile({
         url: url,
         success: (res) => {

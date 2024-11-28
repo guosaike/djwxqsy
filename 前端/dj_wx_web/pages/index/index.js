@@ -16,7 +16,7 @@ Page({
 
     // 请求后台获取配置
     wx.request({
-      url: 'https://test.aketest.site/ymq/',
+      url: 'https://qsy.aketest.site/ymq/',
       method: 'GET',
       success: (res) => {
         this.setData({

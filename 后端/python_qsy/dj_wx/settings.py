@@ -94,8 +94,8 @@ DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME':'testabc', # 记得自己先去创建数据库
-            'USER': 'testabc',
-            'PASSWORD': 'testabc',
+            'USER': 'root',
+            'PASSWORD': '123456',
             'HOST': '127.0.0.1',
             'PORT': 3306,
         }
